@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/coagus/publish/issues"
   },
-  "homepage": "https://github.com/coagus/publish#readme"
+  "homepage": "https://github.com/coagus/publish#readme",
+  "dependencies": {
+    "xlsx": "^0.18.4"
+  }
 }
