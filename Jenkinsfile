@@ -13,6 +13,7 @@ pipeline {
 		stage('Publish Project List') {
 			steps {
 				script {
+                    sh "npm install"
                     sh "node index.js ${InputCSVPath}"
                 }
 			}
