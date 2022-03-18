@@ -1,6 +1,10 @@
 pipeline {
     agent any    
 
+    environment {
+        LD_LIBRARY_PATH = '/opt/oracle/instantclient_19_8'
+    }
+
     stages {
         stage('Load Project List') {
             steps {
