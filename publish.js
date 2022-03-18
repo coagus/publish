@@ -91,7 +91,7 @@ async function run() {
                     && await postProject(projectName,'validate')
                     && await postProject(projectName,'publish')) {
                     console.log(projectName, 'Published!');        
-                }s
+                }
             }
         }
     } else {
