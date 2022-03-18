@@ -1,23 +1,30 @@
-
 const xlsx = require("xlsx");
 const oracledb = require('oracledb');
 const axios = require('axios')
 
 function post(project,task) {
   console.log(task+' '+project)
-  axios
+  let result = false
+  await axios
   .post('http://100.126.0.13:7004/ecm/ecm/CatalogManagement/v2/project/'+project+'/'+task+'', {
     headers: {
         'OnBehalfOf': 'upadmin'
       }
   })
   .then(res => {
-    console.log(`statusCode: ${res.status}`)
-    console.log(res)
+    if (res.data[0].status != null && res.data[0].status == 200) {
+      console.log(res.data[0].message)
+      result = true
+    } else {
+      console.log(`statusCode: ${res.status}`)
+      console.log(res.data)
+    }
   })
   .catch(error => {
     console.error(error)
   })
+
+  return result
 }
 
 async function run() {
@@ -40,7 +47,7 @@ async function run() {
       for (let cell in sheet) {    
         if(cell.toString()[0] === 'A' && cell.toString()[1] !== '1') {
           var projectName = sheet[cell].v;
-          console.log('project name',projectName)
+          console.log('project',projectName)
           result = await connection.execute(
             `select * from ECM01.cwpc_project where projectcode = :project`,
             [projectName],
@@ -66,8 +73,9 @@ async function run() {
             );
           }
 
-          post(projectName,"validate")
-          post(projectName,"publish")
+          if (post(projectName,"validate")) {
+            post(projectName,"publish")
+          }          
         }    
       }
     }

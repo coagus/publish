@@ -18,7 +18,7 @@ pipeline {
 			steps {
 				script {
                     sh "npm install"
-                    sh "node index.js ${InputCSVPath}"
+                    sh "node publish.js ${InputCSVPath}"
                 }
 			}
 		}
