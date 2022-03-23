@@ -42,7 +42,7 @@ pipeline {
                     def pathFile = "${packageFile}"
                     pathFile = pathFile.replace("/package.zip","")      
                     sh "ls"              
-                    sh "./script.sh ${pathFile}"
+                    sh "sh/script.sh ${pathFile}"
                 }
             }
         }
