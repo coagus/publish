@@ -8,14 +8,15 @@ pipeline {
     }
 
     parameters {                          
-        booleanParam(defaultValue: true, name: 'INFOTABLES'),
-        booleanParam(defaultValue: true, name: 'CODETABLE'),	
-		booleanParam(defaultValue: true, name: 'PROJECTS'),	
-		booleanParam(defaultValue: true, name: 'SCRIPTS'),	
-		booleanParam(defaultValue: true, name: 'BSCS'),	
-		booleanParam(defaultValue: true, name: 'CS'),	
-		booleanParam(defaultValue: true, name: 'METADATA'),	
+        booleanParam(defaultValue: true, name: 'INFOTABLES')
+        booleanParam(defaultValue: true, name: 'CODETABLE')	
+		booleanParam(defaultValue: true, name: 'PROJECTS')	
+		booleanParam(defaultValue: true, name: 'SCRIPTS')	
+		booleanParam(defaultValue: true, name: 'BSCS')	
+		booleanParam(defaultValue: true, name: 'CS')
+		booleanParam(defaultValue: true, name: 'METADATA')
 		booleanParam(defaultValue: true, name: 'PUBLISH')
+        booleanParam(defaultValue: true, name: 'PRUE_BA')
     }
 
     stages {
