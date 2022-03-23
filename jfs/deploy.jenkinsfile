@@ -1,3 +1,5 @@
+def pathPackage
+
 pipeline {
     agent any
     stages {
@@ -38,11 +40,9 @@ pipeline {
                     ])
 
                     def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
-                    echo "The package file is ${packageFile}"
-                    def pathFile = "${packageFile}"
-                    pathFile = pathFile.replace("/package.zip","")      
-                    sh "ls"              
-                    sh "sh/script.sh ${pathFile}"
+                    pathPackage = "${packageFile}"
+                    pathPackage = pathFile.replace("/package.zip","")      
+                    sh "sh/unzip.sh ${pathPackage}"
                 }
             }
         }
