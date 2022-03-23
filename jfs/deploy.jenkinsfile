@@ -2,6 +2,11 @@ def pathPackage
 
 pipeline {
     agent any
+
+    environment {
+        LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"
+    }
+
     stages {
         stage('Load Package') {
             steps {
@@ -35,19 +40,23 @@ pipeline {
                             booleanParam(
                                 defaultValue: true, 
                                 name: 'METADATA'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'PUBLISH'
                             )
                         ])
                     ])
 
                     def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
                     pathPackage = "${packageFile}".replace("/package.zip","")
-                    //sh "sh/unzip.sh ${pathPackage}"
                     sh "unzip ${packageFile} -d ${pathPackage}"
+                    sh "npm install"
                 }
             }
         }
 
-        stage("Infotables"){
+        stage("Infotables") {
             steps {
                 script{
                     if (params.INFOTABLES) {
@@ -59,7 +68,7 @@ pipeline {
             }
         }
 
-        stage("Codtables"){
+        stage("Codtables") {
             steps {
                 script{
                     if (params.CODETABLE) {
@@ -71,7 +80,7 @@ pipeline {
             }
         }
 
-        stage("Projects"){
+        stage("Projects") {
             steps {
                 script{
                     if (params.PROJECTS) {
@@ -83,7 +92,7 @@ pipeline {
             }
         }
 
-        stage("Scripts"){
+        stage("Scripts") {
             steps {
                 script{
                     if (params.SCRIPTS) {
@@ -95,7 +104,7 @@ pipeline {
             }
         }
 
-        stage("BSCS"){
+        stage("BSCS") {
             steps {
                 script{
                     if (params.BSCS) {
@@ -107,7 +116,7 @@ pipeline {
             }
         }
 
-        stage("CS"){
+        stage("CS") {
             steps {
                 script{
                     if (params.CS) {
@@ -119,11 +128,23 @@ pipeline {
             }
         }
 
-        stage("Metadata"){
+        stage("Metadata") {
             steps {
                 script{
                     if (params.METADATA) {
                         echo "Treat metadata"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+
+        stage("Publish") {
+            steps {
+                script{
+                    if (params.PUBLISH) {
+                        sh "node src/publish.js ${pathPackage}/package/publish.xlsx"
                     } else {
                         echo "skip this task"
                     }
