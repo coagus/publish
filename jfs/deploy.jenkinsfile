@@ -1,0 +1,134 @@
+pipeline {
+    agent any
+    stages {
+        stage('Load Package') {
+            steps {
+                script { 
+                    properties([
+                        parameters([                            
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'INFOTABLES'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'CODETABLE'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'PROJECTS'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'SCRIPTS'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'BSCS'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'CS'
+                            ),
+                            booleanParam(
+                                defaultValue: true, 
+                                name: 'METADATA'
+                            )
+                        ])
+                    ])
+
+                    def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
+                    echo "The package file is ${packageFile}"
+                    def pathFile = "${packageFile}"
+                    pathFile = pathFile.replace("/package.zip","")      
+                    sh "ls"              
+                    sh "./script.sh ${pathFile}"
+                }
+            }
+        }
+
+        stage("Infotables"){
+            steps {
+                script{
+                    if (params.INFOTABLES) {
+                        echo "Treat infotables"
+                    } else {
+                        echo "skip this task"
+                    }
+                }               
+            }
+        }
+
+        stage("Codtables"){
+            steps {
+                script{
+                    if (params.CODETABLE) {
+                        echo "Treat codetables"
+                    } else {
+                        echo "skip this task"
+                    }
+                }  
+            }
+        }
+
+        stage("Projects"){
+            steps {
+                script{
+                    if (params.PROJECTS) {
+                        echo "Treat projects"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+
+        stage("Scripts"){
+            steps {
+                script{
+                    if (params.SCRIPTS) {
+                        echo "Treat scripts"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+
+        stage("BSCS"){
+            steps {
+                script{
+                    if (params.BSCS) {
+                        echo "Treat bscs"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+
+        stage("CS"){
+            steps {
+                script{
+                    if (params.CS) {
+                        echo "Treat CS"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+
+        stage("Metadata"){
+            steps {
+                script{
+                    if (params.METADATA) {
+                        echo "Treat metadata"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
+        }
+    }   
+}

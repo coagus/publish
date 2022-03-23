@@ -1,0 +1,15 @@
+pipeline {
+    agent any    
+
+    stages {
+        stage('Load Project List') {
+			steps {
+				script {
+                    def inputCSVPath = input message:'Load xlsx file', parameters:  [file(name:'projects.xlsx')]
+                    sh "npm install"
+                    sh "node src/index.js ${inputCSVPath}"
+                }
+			}
+		}
+    }
+}

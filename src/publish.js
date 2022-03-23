@@ -10,37 +10,36 @@ const isValidProjectDB = async (projectName) => {
         result = await connection.execute(
             `select STATUS from ECM01.cwpc_project where projectcode = :project`,
             [projectName],
-            { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT })
+            { resultSet: true, outFormat: oracledb.OUT_FORMAT_OBJECT });
           
-        const rs = result.resultSet
-        let status = 'DEF'
-        let project = await rs.getRows(0)
+        const rs = result.resultSet;
+        let project = await rs.getRows(0);
 
         if (project.length > 0) {
             console.log('status:', project[0].STATUS)
-            status = project[0].STATUS
+            if (project[0].STATUS == 'ACT') {
+                console.log('Set Status to DEF')
+                await connection.execute(
+                    "begin setCatalogProjectStatus(:project,'DEF'); commit; end;", 
+                    [projectName]
+                );
+            }
+    
+            valid = true;
         } else {
-            console.log('Project not exists')
+            console.log('Project not exists');
         }
           
-        await rs.close();
-
-        if (status == 'ACT') {
-            console.log('Set Status to DEF')
-            await connection.execute(
-                "begin setCatalogProjectStatus(:project,'DEF'); commit; end;", 
-                [projectName]
-            );
-        }
-
-        valid = true;
+        await rs.close();        
     } catch (err) {
+        console.log('Database error:')
         console.error(err);
     } finally {
         if (connection) {
             try {
                 await connection.close();
             } catch (err) {
+                console.log('Error while to close DB:')
                 console.error(err);
             }
         }
@@ -57,15 +56,16 @@ const postProject = async (projectName, task) => {
         }
     })
     .then(res => {
-        if (res.data[0].status != null && res.data[0].status == 200) {
+        if (res.data.length > 0 && res.data[0].hasOwnProperty('status') && res.data[0].status == 200) {
             console.log(res.data[0].message)
             result = true
         } else {
-            console.log(`statusCode: ${res.status}`)
+            console.log('Error while to ' + task)
             console.log(res.data)
         }
     })
     .catch(error => {
+        console.log('Post error to ' + task)
         console.error(error)
     })    
 
@@ -82,7 +82,7 @@ async function run() {
     const sheet = book.Sheets['Projects'];
 
     if (sheet != null) {
-        console.log('Read project list in col A');
+        console.log('Read project list in column A');
         for (let cell in sheet) {    
             if(cell.toString()[0] === 'A' && cell.toString()[1] !== '1') {
                 var projectName = sheet[cell].v;
@@ -90,7 +90,7 @@ async function run() {
                 if (await isValidProjectDB(projectName)
                     && await postProject(projectName,'validate')
                     && await postProject(projectName,'publish')) {
-                    console.log(projectName, 'Published!');        
+                    console.log('***** ',projectName, 'Published! *****');        
                 }
             }
         }
