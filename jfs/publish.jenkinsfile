@@ -7,7 +7,7 @@ pipeline {
 				script {
                     def inputCSVPath = input message:'Load xlsx file', parameters:  [file(name:'projects.xlsx')]
                     sh "npm install"
-                    sh "node src/index.js ${inputCSVPath}"
+                    sh "node src/publish.js ${inputCSVPath}"
                 }
 			}
 		}
