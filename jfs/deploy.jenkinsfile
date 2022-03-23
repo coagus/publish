@@ -41,7 +41,7 @@ pipeline {
 
                     def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
                     pathPackage = "${packageFile}"
-                    pathPackage = pathFile.replace("/package.zip","")      
+                    pathPackage = pathPackage.replace("/package.zip","")      
                     sh "sh/unzip.sh ${pathPackage}"
                 }
             }
