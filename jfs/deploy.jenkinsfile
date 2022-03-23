@@ -7,47 +7,21 @@ pipeline {
         LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"
     }
 
+    parameters([                            
+        booleanParam(defaultValue: true, name: 'INFOTABLES'),
+        booleanParam(defaultValue: true, name: 'CODETABLE'),	
+		booleanParam(defaultValue: true, name: 'PROJECTS'),	
+		booleanParam(defaultValue: true, name: 'SCRIPTS'),	
+		booleanParam(defaultValue: true, name: 'BSCS'),	
+		booleanParam(defaultValue: true, name: 'CS'),	
+		booleanParam(defaultValue: true, name: 'METADATA'),	
+		booleanParam(defaultValue: true, name: 'PUBLISH')
+    ])
+
     stages {
         stage('Load Package') {
             steps {
                 script { 
-                    properties([
-                        parameters([                            
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'INFOTABLES'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'CODETABLE'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'PROJECTS'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'SCRIPTS'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'BSCS'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'CS'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'METADATA'
-                            ),
-                            booleanParam(
-                                defaultValue: true, 
-                                name: 'PUBLISH'
-                            )
-                        ])
-                    ])
-
                     def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
                     pathPackage = "${packageFile}".replace("/package.zip","")
                     sh "unzip ${packageFile} -d ${pathPackage}"
