@@ -16,7 +16,6 @@ pipeline {
 		booleanParam(defaultValue: true, name: 'CS')
 		booleanParam(defaultValue: true, name: 'METADATA')
 		booleanParam(defaultValue: true, name: 'PUBLISH')
-        booleanParam(defaultValue: true, name: 'PRUE_BA')
     }
 
     stages {
@@ -71,7 +70,7 @@ pipeline {
             steps {
                 script{
                     if (params.SCRIPTS) {
-                        echo "Treat scripts"
+                        sh "node src/executeSql.js ${pathPackage}/package/scripts"
                     } else {
                         echo "skip this task"
                     }
