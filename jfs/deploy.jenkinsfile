@@ -16,20 +16,19 @@ pipeline {
     }
 
     environment {
-        LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"
+        LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"        
     }
 
     stages {
         stage('Load Package') {
-            environment {
-                NODE_ENV = params.ENVIROMENT
-            }
             steps {
                 script { 
                     def packageFile = input message:'Load Package file', parameters:  [file(name:'package.zip', description:'Load *.zip file')]
                     pathPackage = "${packageFile}".replace("/package.zip","")
                     sh "unzip ${packageFile} -d ${pathPackage}"
                     sh "npm install"
+                    
+                    env.NODE_ENV = params.ENVIROMENT
                 }
             }
         }
