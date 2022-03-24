@@ -3,11 +3,8 @@ def pathPackage
 pipeline {
     agent any
 
-    environment {
-        LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"
-    }
-
-    parameters {                          
+    parameters { 
+        choice(name: 'ENVIROMENT', choices: ['dev', 'mdev'])                         
         booleanParam(defaultValue: true, name: 'INFOTABLES')
         booleanParam(defaultValue: true, name: 'CODETABLE')	
 		booleanParam(defaultValue: true, name: 'PROJECTS')	
@@ -16,6 +13,11 @@ pipeline {
 		booleanParam(defaultValue: true, name: 'CS')
 		booleanParam(defaultValue: true, name: 'METADATA')
 		booleanParam(defaultValue: true, name: 'PUBLISH')
+    }
+
+    environment {
+        LD_LIBRARY_PATH = "/opt/oracle/instantclient_19_8"
+        NODE_ENV = params.ENVIROMENT
     }
 
     stages {

@@ -1,12 +1,14 @@
 const oracledb = require('oracledb')
 const axios = require('axios')
 const xlsx = require("xlsx")
+const config = require('config')
 
 const isValidProjectDB = async (projectName) => {
     console.log('Valid',projectName,'in DB')
     let valid = false
+    const dbConfig = config.get('dbConfig')
     try {
-        connection = await oracledb.getConnection({ user: "ECM01", password: "ECM01", connectionString: "100.126.1.96:1521/D_EOC01" })
+        connection = await oracledb.getConnection(dbConfig)
         result = await connection.execute(
             `select STATUS from ECM01.cwpc_project where projectcode = :project`,
             [projectName],

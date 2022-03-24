@@ -1,6 +1,7 @@
 const oracledb = require('oracledb')
 const fs = require('fs')
 const util = require('util')
+const config = require('config')
 
 const readdir = util.promisify(fs.readdir)
 const readFile = util.promisify(fs.readFile)
@@ -23,9 +24,10 @@ const getScripts = async (path) => {
 
 const run = async () => {
     let path = process.argv.slice(2)[0]
+    const dbConfig = config.get('dbConfig')
 
     try {
-        connection = await oracledb.getConnection({ user: "ECM01", password: "ECM01", connectionString: "100.126.1.96:1521/D_EOC01" })
+        connection = await oracledb.getConnection(dbConfig)
         let scripts = await getScripts(path)
         for (const sql of scripts) {
             console.log(`execute script: ${sql.file}`)
