@@ -51,8 +51,9 @@ const isValidProjectDB = async (projectName) => {
 
 const postProject = async (projectName, task) => {
     console.log(task,projectName)
+    const url = config.get('urlPost')
     let result = false  
-    await axios.post('http://100.126.0.13:7004/ecm/ecm/CatalogManagement/v2/project/'+projectName+'/'+task+'', {
+    await axios.post(`http://${url}/ecm/ecm/CatalogManagement/v2/project/${projectName}/${task}`, {
         headers: {
             'OnBehalfOf': 'upadmin'
         }
