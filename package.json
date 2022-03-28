@@ -25,8 +25,11 @@
     "config": "^3.3.7",
     "fs": "0.0.1-security",
     "libaio": "^1.0.3",
+    "node-xml-stream": "^1.0.2",
     "oracledb": "https://github.com/oracle/node-oracledb/releases/download/v5.3.0/oracledb-src-5.3.0.tgz",
     "util": "^0.12.4",
-    "xlsx": "^0.18.4"
+    "xlsx": "^0.18.4",
+    "xml2js": "^0.4.23",
+    "zip-a-folder": "^1.1.3"
   }
 }

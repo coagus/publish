@@ -79,6 +79,18 @@ pipeline {
                     }
                 }
             }
+        }        
+
+        stage("Publish") {
+            steps {
+                script{
+                    if (params.PUBLISH) {
+                        sh "node src/publish.js ${pathPackage}/package/publish.xlsx"
+                    } else {
+                        echo "skip this task"
+                    }
+                }
+            }
         }
 
         stage("BSCS") {
@@ -110,18 +122,6 @@ pipeline {
                 script{
                     if (params.METADATA) {
                         echo "Treat metadata"
-                    } else {
-                        echo "skip this task"
-                    }
-                }
-            }
-        }
-
-        stage("Publish") {
-            steps {
-                script{
-                    if (params.PUBLISH) {
-                        sh "node src/publish.js ${pathPackage}/package/publish.xlsx"
                     } else {
                         echo "skip this task"
                     }

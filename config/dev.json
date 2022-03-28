@@ -4,5 +4,6 @@
         "password": "ECM01", 
         "connectionString": "100.126.1.96:1521/D_EOC01" 
     },
-    "urlPost" : "100.126.0.13:7004"
+    "urlPost" : "100.126.0.13:7004",
+    "urlBSCS": " 100.126.0.10:9090"
 }
